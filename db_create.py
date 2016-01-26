@@ -4,7 +4,7 @@
 # from _config import DATABASE_PATH
 
 from views import db
-from models import Task
+from models import Task, User
 from datetime import date
 
 # with sqlite3.connect(DATABASE_PATH) as connection:
@@ -28,7 +28,7 @@ from datetime import date
 
 db.create_all()
 
-db.session.add(Task("Finish this tutorial",date(2015,3,13),10,1))
-db.session.add(Task("Finish Real Python",date(2015,3,13),10,1))
+# db.session.add(Task("Finish this tutorial",date(2015,3,13),10,1))
+# db.session.add(Task("Finish Real Python",date(2015,3,13),10,1))
 
 db.session.commit()
