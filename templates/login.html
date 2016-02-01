@@ -2,23 +2,42 @@
 {% block content %}
 
 <h1>Welcome to Flasktaskr!</h1>
-<h3>Please login to access your task list.</h3>
-
-<form method="post" action="/">
+<!-- <h3>Please login to access your task list.</h3> -->
+<div class="lead">Please sign in to access your task list!</div>
+<form class="form-signin" role="form" method="post" action="/">
   {{ form.csrf_token }}
   <p>
-    {{ form.name.label }}: {{ form.name }}
+  {{ form.name(placeholder="name") }}
+  <span class="error">
+    {% if form.name.errors %}
+      {% for error in form.name.errors %}
+        {{error}}
+      {% endfor %}
+    {% endif %}
+   </span>
+   </p>
+  <p>
+  {{ form.password(placeholder="password") }}
+  <span class="error">
+    {% if form.password.errors %}
+      {% for error in form.password.errors %}
+        {{error}}
+      {% endfor %}
+    {% endif %}
+   </span>
+   </p>
+  <button class="btn btn-sm btn-success" type="submit">Sign in</button>
+<!--      {{ form.name.label }}: {{ form.name }}
     &nbsp;&nbsp;
     {{ form.password.label }}: {{ form.password }}
     &nbsp;&nbsp;
   </p>
-  <!--<span>Username: <input type="text" name="username" value="{{request.form.username}}"></span>
-  <span>Password: <input type="password" name="password" value="{{request.form.password}}"></span>-->
+  <span>Username: <input type="text" name="username" value="{{request.form.username}}"></span>
+  <span>Password: <input type="password" name="password" value="{{request.form.password}}"></span>
   <input type="submit" value="Login">
-</form>
-
+</form> -->
 <br>
-
+<br>
 <p><em>Need an account? </em><a href="/register">Signup!!!</a></p>
 
 <!--<p><em>Use 'admin' for the username and password.</em></p>-->
