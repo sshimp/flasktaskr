@@ -71,8 +71,8 @@ def login():
 				return redirect(url_for('tasks'))
 			else:
 				error = 'Invalid username or password!'
-		else:
-			error = 'Both fields are required!'
+		# else:
+		# 	error = 'Both fields are required!'
 	return render_template('login.html', form=form, error=error)
 
 @app.route('/tasks/')
@@ -140,10 +140,15 @@ def complete(task_id):
 	# g.db.commit()
 	# g.db.close()
 	new_id = task_id
-	db.session.query(Task).filter_by(task_id=new_id).update({"status":"0"})
-	db.session.commit()
-	flash('The task was marked as complete. Nice!')
-	return redirect(url_for('tasks'))
+	task = db.session.query(Task).filter_by(task_id=new_id)
+	if session['user_id'] == task.first().user_id:
+		task.update({"status":"0"})
+		db.session.commit()
+		flash('The task was marked as complete. Nice!')
+		return redirect(url_for('tasks'))
+	else:
+		flash('You can only update tasks that belong to you!')
+		return redirect(url_for('tasks'))
 
 @app.route('/delete/<int:task_id>/')
 @login_required

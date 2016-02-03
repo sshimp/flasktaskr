@@ -166,6 +166,7 @@ class AllTests(unittest.TestCase):
 		self.app.get('tasks/',follow_redirects=True)
 		response = self.app.get("complete/1/", follow_redirects=True)
 		self.assertNotIn(b'marked as complete', response.data)
+		self.assertIn(b'belong to you', response.data)
 
 if __name__ == "__main__":
 	unittest.main()

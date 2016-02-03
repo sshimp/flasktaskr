@@ -1,4 +1,4 @@
-body            { font-family: sans-serif; background: #eee; }
+body            { font-family: sans-serif; padding: 60px 0; background: #ffffff; }
 a, h1, h2       { color: #377ba8; }
 h1, h2          { font-family: 'Georgia', serif; margin: 0; }
 h1              { border-bottom: 2px solid #eee; }
@@ -15,7 +15,8 @@ h2              { font-size: 1.2em; }
                   margin-bottom: 1em; background: #fafafa; }
 .flash          { background: #cee5F5; padding: 0.5em;
                   border: 1px solid #aacbe2; }
-.error          { background-color: #FFFFFF; font-size: .8em; color: red}
+.error          { background-color: #FFFFFF; font-size: .8em; color: red }
+.footer			{ padding-top: 30px; }
 
 .datagrid table {
 border-collapse: collapse;
