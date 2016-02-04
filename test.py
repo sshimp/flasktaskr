@@ -37,6 +37,12 @@ class AllTests(unittest.TestCase):
  		db.session.add(new_user)
  		db.session.commit()
 
+ 	def create_admin_user(self):
+ 		new_user = User(name='admin',email='admin@flasktask.org',
+ 			password='admin',role='admin')
+ 		db.session.add(new_user)
+ 		db.session.commit()
+
  	def create_task(self):
  		return self.app.post('add/', data=dict(
  			name='Go to the bank',
@@ -167,6 +173,50 @@ class AllTests(unittest.TestCase):
 		response = self.app.get("complete/1/", follow_redirects=True)
 		self.assertNotIn(b'marked as complete', response.data)
 		self.assertIn(b'belong to you', response.data)
+
+	def test_users_cannot_delete_tasks_not_created_by_them(self):
+		self.create_user('Robert','rob@rob.org','python')
+		self.login('Robert','python')
+		self.app.get('tasks/',follow_redirects=True)
+		self.create_task()
+		self.logout()
+		self.create_user('Bobert','bob@rob.org','bython')
+		self.login('Bobert','bython')
+		self.app.get('tasks/',follow_redirects=True)
+		response = self.app.get("delete/1/", follow_redirects=True)
+		self.assertIn(b'belong to you', response.data)
+
+	def test_default_user_role(self):
+		db.session.add(User('Robert','rob@rob.org','python'))
+		db.session.commit()
+		users = db.session.query(User).all()
+		print users
+		for user in users:
+			self.assertEquals(user.role, 'user')
+
+	def test_admin_users_can_complete_tasks(self):
+		self.create_user('Robert','rob@rob.org','python')
+		self.login('Robert','python')
+		self.app.get('tasks/', follow_redirects=True)
+		self.create_task()
+		self.logout()
+		self.create_admin_user()
+		self.login('admin','admin')
+		self.app.get('tasks/', follow_redirects=True)
+		response = self.app.get("complete/1/", follow_redirects=True)
+		self.assertNotIn('belong to you',response.data)
+
+	def test_admin_users_can_delete_tasks(self):
+		self.create_user('Robert','rob@rob.org','python')
+		self.login('Robert','python')
+		self.app.get('tasks/', follow_redirects=True)
+		self.create_task()
+		self.logout()
+		self.create_admin_user()
+		self.login('admin','admin')
+		self.app.get('tasks/', follow_redirects=True)
+		response = self.app.get("delete/1/", follow_redirects=True)
+		self.assertNotIn('belong to you',response.data)
 
 if __name__ == "__main__":
 	unittest.main()
